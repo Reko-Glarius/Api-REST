@@ -1,16 +1,18 @@
-from itertools import cycle
+##########################################################  Librerias
 from flask import Flask, escape, request
 from api_function import generar_datos_carreras, generar_ponderaciones_postulante
 
+##########################################################  Definiciones del servicio
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.route('/')
+##########################################################  Servicios Incorporados
+@app.route('/') ###Servicio por defecto: Confirma que se esta pudiendo consumir el servicio
 def say_hi():
     return 'API funcionando'
 
-@app.route('/topten', methods=['POST'])
-def digito_verificador():
+@app.route('/topten', methods=['POST']) ###Servicio POST 10mejores: Mediante los puntajes de un postulante, entrega un JSON con las 10 mejores carreras para el
+def 10mejores():
     if(request.method=='POST'):
         ##############################################  Variables
         nem=request.form.get('nem')
@@ -55,36 +57,21 @@ def digito_verificador():
         for iteracion in range(0,28):
             datos=mis_carreras[iteracion]
             if()
-        ##############################################  Creacion del Json final
+        ##############################################  Creacion del Json final a retornar
         return{
-            "nem":nem,
-            "ranking":ranking
+            "Carrera 1":str(mis_carreras[0][0])+"%"+str(mis_carreras[0][1])+"%"+str(mis_carreras[0][2])+"%"+str(mis_carreras[0][3]),
+            "Carrera 2":str(mis_carreras[1][0])+"%"+str(mis_carreras[1][1])+"%"+str(mis_carreras[1][2])+"%"+str(mis_carreras[1][3]),
+            "Carrera 3":str(mis_carreras[2][0])+"%"+str(mis_carreras[2][1])+"%"+str(mis_carreras[2][2])+"%"+str(mis_carreras[2][3]),
+            "Carrera 4":str(mis_carreras[3][0])+"%"+str(mis_carreras[3][1])+"%"+str(mis_carreras[3][2])+"%"+str(mis_carreras[3][3]),
+            "Carrera 5":str(mis_carreras[4][0])+"%"+str(mis_carreras[4][1])+"%"+str(mis_carreras[4][2])+"%"+str(mis_carreras[4][3]),
+            "Carrera 6":str(mis_carreras[5][0])+"%"+str(mis_carreras[5][1])+"%"+str(mis_carreras[5][2])+"%"+str(mis_carreras[5][3]),
+            "Carrera 7":str(mis_carreras[6][0])+"%"+str(mis_carreras[6][1])+"%"+str(mis_carreras[6][2])+"%"+str(mis_carreras[6][3]),
+            "Carrera 8":str(mis_carreras[7][0])+"%"+str(mis_carreras[7][1])+"%"+str(mis_carreras[7][2])+"%"+str(mis_carreras[7][3]),
+            "Carrera 9":str(mis_carreras[8][0])+"%"+str(mis_carreras[8][1])+"%"+str(mis_carreras[8][2])+"%"+str(mis_carreras[8][3]),
+            "Carrera 10":str(mis_carreras[9][0])+"%"+str(mis_carreras[9][1])+"%"+str(mis_carreras[9][2])+"%"+str(mis_carreras[9][3])
         }
-        """
-        n_rut = rut.split("-")
-        reversed_digits = map(int, reversed(str(n_rut[-1])))
-        factors = cycle(range(1, 8))
-        s = sum(d * f for d, f in zip(reversed_digits, factors))
-        mod = (-s) % 10
-        if (mod == 9):
-            mod = 'k'
-        if (mod == 10):
-            mod = -1
-        if (str(mod) == str(n_rut[0])):
-            return {
-                "rut": rut,
-                "digito verificador": mod,
-                "mensaje": "rut correcto"
-            }
-        else:
-            return {
-                "mensaje": "rut no coincide con el digito verificador",
-                "ingresado": str(n_rut[0]),
-                "correcto": mod
-            }
-            """ 
 
-@app.route('/saludo', methods=['POST'])
+@app.route('/saludo', methods=['GET'])
 def generar_saludo():
     if request.method == 'POST':
         nom = request.form.get('nombre')
@@ -104,4 +91,4 @@ def generar_saludo():
         }
 
 
-app.run()
+app.run() ###Activacion del servicio
