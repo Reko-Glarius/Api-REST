@@ -1,4 +1,5 @@
 def generar_datos_carreras(): ###Funcion para generar lista con todos los datos relevantes de todas las carreras
+    ### Variables para datos de las carreras
     nom_car=[]
     cod_car=[]
     alfa_car=[]
@@ -30,12 +31,12 @@ def ordenar(listado): ###Funcion recursiva para ordenar de mayor a menor los val
         return listado
     else: ###Escenario recursivo, cuando existen 2 o mas elementos, ya que es posible tener que ordenarlos
         pivote=listado[0][1]
-        for elemento in listado:
-            if(elemento[1]>pivote):
+        for elemento in listado: ###Para cada elemento de la lista...
+            if(elemento[1]>pivote):    ### ...Se corrobora si es mayor...
                 izq.append(elemento)
-            elif(elemento[1]==pivote):
+            elif(elemento[1]==pivote): ### ...Igual...
                 cen.append(elemento)
-            else:
+            else:                      ### ...O menor al pivote
                 der.append(elemento)
-    return ordenar(izq)+cen+ordenar(der) 
+    return ordenar(izq)+cen+ordenar(der) ###Finalmente se retorna la aplicacion recursiva de los elementos mayores e inferiores al pivote
     
