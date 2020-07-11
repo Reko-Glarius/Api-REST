@@ -1,6 +1,6 @@
 ##########################################################  Librerias
-from flask import Flask, escape, request
-from api_function import generar_datos_carreras, generar_ponderaciones_postulante
+from flask import Flask, escape, request, jsonify
+from api_function import generar_datos_carreras, generar_ponderaciones_postulante, ordenar
 
 ##########################################################  Definiciones del servicio
 app = Flask(__name__)
@@ -15,12 +15,12 @@ def say_hi():
 def generar_top():
     if(request.method=='POST'):
         ##############################################  Variables
-        nem=request.form.get('nem')
-        ranking=request.form.get('ranking')
-        matematicas=request.form.get('matematicas')
-        lenguaje=request.form.get('lenguajes')
-        ciencias=request.form.get('ciencias')
-        historia=request.form.get('historia')
+        nem=float(request.form.get('nem'))
+        ranking=float(request.form.get('ranking'))
+        matematicas=float(request.form.get('matematicas'))
+        lenguaje=float(request.form.get('lenguajes'))
+        ciencias=float(request.form.get('ciencias'))
+        historia=float(request.form.get('historia'))
         carreras=generar_datos_carreras() ###Generacion de lista con los datos relevantes de cada carrera
         mis_carreras=[]
 
@@ -34,59 +34,48 @@ def generar_top():
         for posicion in range(0,28):
             contador=-1
             base=carreras[posicion]
-            mi_numero=ponderacion_postulante[posicion]
-            if(mi_numero>=base[2]):
-                while(mi_numero>=base[2]):
+            mi_numero=ponderaciones_postulante[posicion]
+            if(mi_numero>=base[2]): ###Caso de estudiante que NO quedarian en lista de espera
+                while(True):
                     if(mi_numero>base[2]):
                         contador+=1
-                        mi_numero+=base[3]
+                        base[2]+=base[3]
                     else:
-                        mis_carreras.append([posicion+1, contador])
+                        mis_carreras.append([posicion+1, base[4]-contador, mi_numero])
                         break
             else:
                 contador=0
-                while(mi_numero<base[2]):
+                while(True): ###Estudiantes que quedarian en lista de espera
                     if(mi_numero<base[2]):
                         base[2]-=base[3]
                         contador-=1
                     else:
-                        mis_carreras.append([posicion+1, contador])
+                        mis_carreras.append([posicion+1, contador, mi_numero])
                         break
         ##############################################  Ordenamiento de datos y creacion del Json final a retornar
-        mis_carreras=ordenar(mis_carreras)
+        mis_carreras=ordenar(mis_carreras) ###Organiza posiciones del estudiante, priorizando valores positivos y el menor de ellos
         Jsons=[]
         for iteracion in range(0,10):
             datos=mis_carreras[iteracion]
-            datos_carrera_particular=carreras[datos[0]]
-            if(datos[0]>=0):
+            datos_carrera_particular=carreras[datos[0]-1]
+            if(datos[1]>=0): ###Escenario en que el estudiante NO quedo en lista de espera
                 json_especifico={
                     "Codigo":datos_carrera_particular[1],
                     "Nombre":datos_carrera_particular[0],
-                    "Ponderacion":datos[0],
-                    "Posicion":(130-datos[1])
+                    "Ponderacion":datos[2],
+                    "Posicion":datos[1]
                 }
                 Jsons.append(json_especifico)
-            else:
+            else: ###Escenario en que el estudiante queda en lista de espera
                 json_especifico={
-                    "Codigo":datos_carrera_particular[1],
-                    "Nombre":datos_carrera_particular[0],
-                    "Ponderacion":datos[0],
-                    "Posicion":"Lista de Espera: "+str(datos[1])
+                    "Codigo": datos_carrera_particular[1],
+                    "Nombre": datos_carrera_particular[0],
+                    "Ponderacion": datos[2],
+                    "Posicion": "Lista de Espera: "+str(datos[1]*(-1))
                 }
                 Jsons.append(json_especifico)
         ### Retorno del JSON final
-        return {
-            "Carrera 1":Jsons[0],
-            "Carrera 2":Jsons[1],
-            "Carrera 3":Jsons[2],
-            "Carrera 4":Jsons[3],
-            "Carrera 5":Jsons[4],
-            "Carrera 6":Jsons[5],
-            "Carrera 7":Jsons[6],
-            "Carrera 8":Jsons[7],
-            "Carrera 9":Jsons[8],
-            "Carrera 10":Jsons[9],
-        }
+        return jsonify(Jsons)
 
 @app.route('/saludo', methods=['GET'])
 def generar_saludo():
