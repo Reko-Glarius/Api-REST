@@ -115,3 +115,8 @@ def ordenar(listado):
         else:
             negativos.append(elemento)
     return ordenar_mayores(positivos)+ordenar_menores(negativos)
+###################################################################
+
+def generar_info_carreras():
+    L=[]
+    return L

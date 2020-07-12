@@ -1,7 +1,6 @@
 ##########################################################  Librerias
 from flask import Flask, escape, request, jsonify
-from api_function import generar_datos_carreras, generar_ponderaciones_postulante, ordenar
-
+from api_function import generar_datos_carreras, generar_ponderaciones_postulante, ordenar, generar_info_carreras
 ##########################################################  Definiciones del servicio
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -77,9 +76,33 @@ def generar_top():
         ### Retorno del JSON final
         return jsonify(Jsons)
 
-@app.route('/saludo', methods=['GET'])
+@app.route('/carrer/', methods=['GET'])
 def generar_saludo():
-    if(request.method=='POST'):
+    if(request.method=='GET'):
+        args = request.args
+        if(len(args)!=1):
+            return {
+                "Codigo de Error": 121,
+                "Descripcion del Error": "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema"
+            }
+        else:
+            cod_recibido=args['codigo']
+            try:
+                cod_recibido=int(cod_recibido)
+            except:
+                return{
+                    "Cod": 12312
+                }
+            carreras=generar_info_carreras()
+            for iteracion in range(0,28):
+                if(cod_recibido==carreras[iteracion][0]):
+                    return {
+                        "Codigo":carreras[iteracion][0],
+                    }
+                else:
+                    pass
+"""
+        print(codigo_carrera)
         nom = request.form.get('nombre')
         pat = request.form.get('paterno')
         mat = request.form.get('materno')
@@ -95,6 +118,6 @@ def generar_saludo():
             "Nombre completo": nomComProp,
             "Mensaje": "Saludos " + sex + nomComProp
         }
-
+"""
 
 app.run() ###Activacion del servicio
