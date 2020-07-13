@@ -1,16 +1,41 @@
 ##########################################################  Librerias
 from flask import Flask, escape, request, jsonify
+
+### Librerias para sistema de seguridad Basic auth
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash, check_password_hash
+
+### Libreria para permitir funcionamiento CORS
+from flask_cors import CORS
+
+###Libreria personalizada para resulocion de problemas
 from api_function import generar_datos_carreras, generar_ponderaciones_postulante, ordenar, generar_info_carreras
 ##########################################################  Definiciones del servicio
 app = Flask(__name__)
 app.config["DEBUG"] = True
+auth = HTTPBasicAuth()
+
+###Usuarios predeterminados (Cambiar en produccion, o cambiar seccion por datos en BB.DD.)
+users = {
+    "Tester": generate_password_hash("betaman"),
+    "APP": generate_password_hash("RDR-331")
+}
+
+@auth.verify_password ###Funcion para corroborar nombre de usuario y clave ingresados para consumo de api
+def verify_password(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
+
 
 ##########################################################  Servicios Incorporados
 @app.route('/', methods=['GET', 'POST']) ###Servicio por defecto: Confirma que se esta pudiendo consumir el servicio
+@auth.login_required ###Decorador para forzar la utilizacion de autentificacion en el servicio
 def say_hi():
-    return 'API funcionando'
+    return "Hi, {}!. The API it's working".format(auth.current_user())
 
 @app.route('/topten', methods=['POST']) ###Servicio POST 10mejores: Mediante los puntajes de un postulante, entrega un JSON con las 10 mejores carreras para el
+@auth.login_required
 def generar_top():
     if(request.method=='POST'):
         ##############################################  Variables
@@ -77,6 +102,7 @@ def generar_top():
         return jsonify(Jsons)
 
 @app.route('/carrer/', methods=['GET']) ###Servicio el cual, para un codigo en particular, entrega la informacion de la respectiva carrera (solo acepta 1 codigo)
+@auth.login_required
 def datos_carrera():
     if(request.method=='GET'):
         args = request.args
@@ -96,19 +122,19 @@ def datos_carrera():
             
             carreras=generar_info_carreras() ###Se genera un listado con todos los datos de todas las carreras
             for iteracion in range(0,29): ###Se realiza un ciclo iterativo para revisar si existe una carrera con el respectivo codigo
+                if (iteracion == 28):
+                    return {
+                        "Codigo de Error": 232,
+                        "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
+                    }
                 if(cod_recibido==carreras[iteracion][0]): ###Si existe una carrera con ese codigo, retorna su informacion
                     return {
                         "Codigo":carreras[iteracion][0],
                         "Nombre":carreras[iteracion][1]
                     }
-                else: ###En caso contrario, prosigue;  si llega a la 29a iteracion, implica que no encontro ninguna carrera con el codigo respectivo, por lo que manda excepcion
-                    if(iteracion==28):
-                        return {
-                            "Codigo de Error":232,
-                            "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
-                        }
 
 @app.route('/carrers/', methods=['GET']) ###Servicio el cual, para un codigo en particular, entrega la informacion de la respectiva carrera (acepta n codigo)
+@auth.login_required
 def datos_carreras():
     if(request.method=='GET'):
         args = request.args
@@ -126,35 +152,17 @@ def datos_carreras():
                     "Cod": 12312
                 }
             carreras=generar_info_carreras()
-            for iteracion in range(0,29):
+            for iteracion in range(0,28):
+                print(iteracion)
+                if(iteracion==28):
+                    return {
+                        "Codigo de Error": 231,
+                        "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
+                    }
                 if(cod_recibido==carreras[iteracion][0]):
                     return {
                         "Codigo":carreras[iteracion][0],
                         "Nombre":carreras[iteracion][1]
                     }
-                else:
-                    if(iteracion==28):
-                        return {
-                            "Codigo de Error":232,
-                            "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
-                        }
-"""
-        print(codigo_carrera)
-        nom = request.form.get('nombre')
-        pat = request.form.get('paterno')
-        mat = request.form.get('materno')
-        nombreCompleto = nom + ' ' + pat + ' ' + mat + ' '
-        nomComProp = nombreCompleto.title()
-        sexo = request.form.get('sexo')
-        if (int(sexo) == 1):
-            sex = 'Sra. '
-        else:
-            sex = 'Sr. '
-        return {
-            "Sexo": sex,
-            "Nombre completo": nomComProp,
-            "Mensaje": "Saludos " + sex + nomComProp
-        }
-"""
 
 app.run() ###Activacion del servicio
