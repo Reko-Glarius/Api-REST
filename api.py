@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.config["DEBUG"] = True
 
 ##########################################################  Servicios Incorporados
-@app.route('/') ###Servicio por defecto: Confirma que se esta pudiendo consumir el servicio
+@app.route('/', methods=['GET', 'POST']) ###Servicio por defecto: Confirma que se esta pudiendo consumir el servicio
 def say_hi():
     return 'API funcionando'
 
@@ -76,11 +76,43 @@ def generar_top():
         ### Retorno del JSON final
         return jsonify(Jsons)
 
-@app.route('/carrer/', methods=['GET'])
-def generar_saludo():
+@app.route('/carrer/', methods=['GET']) ###Servicio el cual, para un codigo en particular, entrega la informacion de la respectiva carrera (solo acepta 1 codigo)
+def datos_carrera():
     if(request.method=='GET'):
         args = request.args
-        if(len(args)!=1):
+        if(len(args)!=1): ###Corrobora que sea solo UN codigo el recibido, si no cumple, manda un error
+            return {
+                "Codigo de Error": 121,
+                "Descripcion del Error": "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema"
+            }
+        else:
+            cod_recibido=args['codigo']
+            try: ###Corrobora si el codigo es numerico, si no lo es, manda error (los codigos de la UTEM son unicamente numericos)
+                cod_recibido=int(cod_recibido)
+            except:
+                return{
+                    "Cod": 12312
+                }
+            
+            carreras=generar_info_carreras() ###Se genera un listado con todos los datos de todas las carreras
+            for iteracion in range(0,29): ###Se realiza un ciclo iterativo para revisar si existe una carrera con el respectivo codigo
+                if(cod_recibido==carreras[iteracion][0]): ###Si existe una carrera con ese codigo, retorna su informacion
+                    return {
+                        "Codigo":carreras[iteracion][0],
+                        "Nombre":carreras[iteracion][1]
+                    }
+                else: ###En caso contrario, prosigue;  si llega a la 29a iteracion, implica que no encontro ninguna carrera con el codigo respectivo, por lo que manda excepcion
+                    if(iteracion==28):
+                        return {
+                            "Codigo de Error":232,
+                            "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
+                        }
+
+@app.route('/carrers/', methods=['GET']) ###Servicio el cual, para un codigo en particular, entrega la informacion de la respectiva carrera (acepta n codigo)
+def datos_carreras():
+    if(request.method=='GET'):
+        args = request.args
+        if(len(args)==0):
             return {
                 "Codigo de Error": 121,
                 "Descripcion del Error": "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema"
@@ -94,13 +126,18 @@ def generar_saludo():
                     "Cod": 12312
                 }
             carreras=generar_info_carreras()
-            for iteracion in range(0,28):
+            for iteracion in range(0,29):
                 if(cod_recibido==carreras[iteracion][0]):
                     return {
                         "Codigo":carreras[iteracion][0],
+                        "Nombre":carreras[iteracion][1]
                     }
                 else:
-                    pass
+                    if(iteracion==28):
+                        return {
+                            "Codigo de Error":232,
+                            "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
+                        }
 """
         print(codigo_carrera)
         nom = request.form.get('nombre')
