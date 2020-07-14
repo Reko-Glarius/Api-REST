@@ -144,25 +144,31 @@ def datos_carreras():
                 "Descripcion del Error": "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema"
             }
         else:
-            cod_recibido=args['codigo']
-            try:
-                cod_recibido=int(cod_recibido)
-            except:
-                return{
-                    "Cod": 12312
+            codigos=[]
+            for i in range(0,len(args)):
+                try:
+                    codigos.append(int(args["codigo_"+str(i+1)]))
+                except:
+                    pass
+            if(len(codigos)==0):
+                return {
+                    "Codigo": 33333
                 }
             carreras=generar_info_carreras()
-            for iteracion in range(0,28):
-                print(iteracion)
-                if(iteracion==28):
-                    return {
-                        "Codigo de Error": 231,
-                        "Descripcion del Error": "El codigo ingresado no concuerda con el codigo de ninguna carrera"
-                    }
-                if(cod_recibido==carreras[iteracion][0]):
-                    return {
-                        "Codigo":carreras[iteracion][0],
-                        "Nombre":carreras[iteracion][1]
-                    }
+            datos_carreras_seleccionadas=[]
+            for coordenada in range(0, len(codigos)):
+                for iteracion in range(0,28):
+                    if(codigos[coordenada]==carreras[iteracion][0]):
+                        datos_carreras_seleccionadas.append({
+                            "Codigo":carreras[iteracion][0],
+                            "Nombre":carreras[iteracion][1]
+                        })
+            if(len(datos_carreras_seleccionadas)==0):
+                return {
+                    "Codigo":4444,
+                    "Descripcion":"Ninguno de los codigos de careras es valido"
+                }
+            else:
+                return jsonify(datos_carreras_seleccionadas)
 
 app.run() ###Activacion del servicio
