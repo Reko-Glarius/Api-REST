@@ -10,7 +10,8 @@ _Para la instalacion y correcto funcionamiento, se requiere lo siguiente:_
 
 _Mediante instalacion por pip (o pip3, dependiendo el caso de ya poseer python en el equipo), las siguientes librerias:_
 * [Flask](Version )(pip install flask)(https://pypi.org/project/spyne/2.13.2a0/) - Framework estructural del sistema
-* [Flask-httpauth](Version 3.0.3)(pip install flask-httpauth)(https://pypi.org/project/openpyxl/) - Implementacion y manejo de seguridad
+* [Flask-HTTPAuth](Version 3.0.3)(pip install flask-httpauth)(https://pypi.org/project/Flask-HTTPAuth/) - Implementacion y manejo de seguridad
+* [Flask-CORS](Version 3.0.3)(pip install flask-cors)(https://pypi.org/project/Flask-Cors/) - Implementacion y manejo de seguridad
 
 
 
@@ -35,6 +36,7 @@ _2)Ya con python instalado, se procede a instalar las librerias correspondiente 
 ```
 pip install flask
 pip install flask-httpauth
+pip install flask-cors
 ```
 
 _3)Ya con todas las dependencias instaladas, en la locacion del archivo api.py, mediante consola de comandos, activar el programa python (python3 en caso expresado anteriormente en el punto 1)_
