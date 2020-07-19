@@ -61,7 +61,7 @@ Usuario: API
 Clave: RDR-331
 ```
 
-_Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi <USER>!, The API it's working"_
+_Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi |user|!, The API it's working"_
 
 ## Ejecutando las pruebas ⚙️
 
