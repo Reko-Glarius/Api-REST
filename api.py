@@ -163,30 +163,40 @@ def datos_carreras():
         args = request.args
         if(len(args)==0): ###Se corrobora la existencia de almenos una variable
             return "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema", 400
-        elif(len(args)==1):
+        elif(len(args)==1): ###En caso de que solo se reciba solo una variable
             palabra=''
             try:
-                palabra=str(args['texto_1'])
-            except:
+                palabra=str(args['texto_1']) ###Se corrobora la existencia de la variable solicitada
+            except: ###En caso de no estar, se manda una excepcion
                 return "La frase recibida esta mal etiquetada; el nombre de la variable debe ser 'texto_1'", 400
-            palabra=palabra.upper()
-            if(len(palabra)<=3):
+            palabra=palabra.upper() ###La palabra es pasada a mayusculas para mejorar el manejo a futuro
+            if(len(palabra)<=3): ###Se corrobora que la palabra tenga almenos 4 caracteres (incluyend)
                 return "La palabra a revisar debe tener un largo minimo de 4 letras"
             carreras=generar_info_carreras()
-            respuestas=[]
-            for carrera in carreras:
-                if(carrera[1].upper().find(palabra)>=0 and carrera[1].upper().count(palabra)==1):
-                    respuestas.append({
+            respuestas=[] ###Listado de carreras validas
+            for carrera in carreras: ###Para cada carrera...
+                if(carrera[1].upper().find(palabra)>=0): ###Se corrobora que la palabra se encuentre dentro del nombre de la carrera...
+                    respuestas.append({ ###De estar presente, almacena toda la informacion de esa carrera para posteriormente entregarla
                         "Codigo":carrera[0],
-                        "Nombre":carrera[1]
+                        "Nombre":carrera[1],
+                        "Nem": carrera[2],
+                        "Ranking": carrera[3],
+                        "Lenguaje": carrera[4],
+                        "Matematicas": carrera[5],
+                        "Ciencias sociales o Historia": carrera[6],
+                        "Pun. prom. min. entre Leng. y Mat.": carrera[7],
+                        "Pun. Min. de postulacion": carrera[8],
+                        "Vacantes": carrera[9],
+                        "Primer matriculado": carrera[10],
+                        "Ultimo matriculado": carrera[11]
                     })
-            if(len(respuestas)==0):
+            if(len(respuestas)==0): ###En caso de no encontrarse carrera, retorna excepcion
                 return "No se encontro ninguna carrera que concordace", 400
-            else:
+            else: ###Si se encuentra almenos 1, las entrega con exito
                 return jsonify(respuestas), 200
-        else:
+        else: ###En caso de recibir multiples variables (cada una con una palabra)
             palabras=[]
-            for i in range(0,len(args)): ###Se realiza un ciclo iterativo, en el cual almacena todas las variables nombradas 'codigo_n', donde n es menor/igual a la cantidad de variables recibidas
+            for i in range(0,len(args)): ###Se realiza un ciclo iterativo, en el cual almacena todas las variables nombradas 'text_n', donde n es menor/igual a la cantidad de variables recibidas
                 try:
                     palabras.append(str(args["texto_"+str(i+1)]))
                 except:
@@ -194,33 +204,43 @@ def datos_carreras():
             copia_palabras=[]
             if(len(palabras)==0): ###En caso de que no se detecte ninguna variable con un nombre valido, se retorna una escepcion
                 return "La cantidad de carreras recibidas validas es insuficiente para el funcionamiento del sistema", 400
-            else:
+            else: ###En caso de que si hayan, se realiza ciclo iterativo para corroborar que cumplen con la cantidad minima de letras por palabra
                 for palabra in palabras:
                     if(len(palabra)<=3):
                         pass
-                    else:
+                    else: ###Si son validas, se re almacenan, en caso contrario, no
                         copia_palabras.append(palabra.upper())
-            if(len(copia_palabras)==0):
+            if(len(copia_palabras)==0): ###En caso de que no queden palabras, se retorna una excepcion
                 return "La cantidad de palabras recibidas es insuficientes", 400
-            else:
+            else: ###En caso contrario, se prosigue con el servicio
                 palabras=copia_palabras
             carreras=generar_info_carreras() ###Se crea lista con todos los datos de todas las carreras
             datos_carreras_seleccionadas=[]
             codigos=[]
             contador=0
-            for palabra in palabras:
+            for palabra in palabras: ###Se realiza ciclo, en el cual, para cada palabra...
                 contador=0
-                for carrera in carreras:
-                    if(carrera[1].upper().find(palabra)>=0 and carrera[0] not in codigos):
+                for carrera in carreras: ###Se comprueba para cada carrera...
+                    if(carrera[1].upper().find(palabra)>=0 and carrera[0] not in codigos): ###Con la condicion de estar presente y que esta carrera no este ya registrada
                         codigos.append(carrera[0])
                         datos_carreras_seleccionadas.append({
                             "Codigo": carreras[contador][0],
-                            "Nombre": carreras[contador][1]
+                            "Nombre": carreras[contador][1],
+                            "Nem": carreras[contador][2],
+                            "Ranking": carreras[contador][3],
+                            "Lenguaje": carreras[contador][4],
+                            "Matematicas": carreras[contador][5],
+                            "Ciencias sociales o Historia": carreras[contador][6],
+                            "Pun. prom. min. entre Leng. y Mat.": carreras[contador][7],
+                            "Pun. Min. de postulacion": carreras[contador][8],
+                            "Vacantes": carreras[contador][9],
+                            "Primer matriculado": carreras[contador][10],
+                            "Ultimo matriculado": carreras[contador][11]
                         })
                     contador+=1
             if(len(datos_carreras_seleccionadas)==0): ###En caso de que ningun codigo concuerde con alguna carrera, se retorna excepcion
                 return "Ninguno de los codigos de careras es valido", 400
-            else:
+            else: ###En caso contrario, se retornan las carreras de manera exitosa
                 return jsonify(datos_carreras_seleccionadas), 200
 
 app.run() ###Activacion del servicio
