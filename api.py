@@ -1,3 +1,36 @@
+"""
+Nombre del proyecto: API REST ESTUDIANTIL
+Equipo Desarrollador:
+    -Ricardo Aliste G. (Desarrollador)
+    -Daniel Cajas U. (Documentador)
+    -Rodrigo Carmona R. (Documentador)
+Resumen del proyecto:
+    El proyecto consta del desarrollo de una API REST, la cual conste de 3 servicios:
+    
+    1)TOPTEN: Servicio que, en funcion del puntaje obtenido en la psu del consumidor,
+              entregue las 10 carreras en las que este mejor posicionado.
+              
+              En caso de no entrar en primera instancia, entrega si posicion relativa 
+              en la lista de espera.
+              
+    2)CARRER: Servicio que recibe un codigo numerico, el cual corresponde a el codigo
+              de alguna de las carreras de la UTEM; entrega toda la informacion de 
+              esta ultima.
+              
+              En caso de que el codigo no sea valido, o no se encuentre una carrera 
+              con el respectivo codigo, se entrega una excepcion.
+              
+    3)CARRERS: Servicio el cual recibe un o N palabras (ya sea como una sola expresion,
+               como varias), las cuales se corroboran que concuerden con el nombre de 
+               alguna carrera; si se cumple este caso, se entregara la informacion de 
+               todas las carreras a las que concuerden.
+               
+               Si no concuerda con ninguna, o el largo es menor al establecido (minimo 
+               4 caracteres para que la palabra sea valida), se entregara la respectiva 
+               excepcion.
+               
+* Para mas informacion, consultar el README del repositorio 'https://github.com/Reko-Glarius/Api-REST' *
+"""
 ##########################################################  Librerias
 from flask import Flask, escape, request, jsonify
 
@@ -48,7 +81,11 @@ def generar_top():
         historia=request.form.get('historia')
 
         if(matematicas==None or nem==None or ranking==None or lenguaje==None or ciencias==None or historia==None):
-            return "Datos enviados incorrectamente, corrobore las etiquetas de los datos", 400
+            json={
+                'codigo':400,
+                'mensaje':"Datos enviados incorrectamente, corrobore las etiquetas de los datos"
+            }
+            return jsonify(json), 400
 
         try:
             nem = float(nem)
@@ -58,11 +95,19 @@ def generar_top():
             ciencias = float(ciencias)
             historia = float(historia)
         except:
-            return "Daton enviados invalidos, los valores recibidos deben ser numericos unicamente", 400
+            json={
+                'codigo':400,
+                'mensaje':"Datos enviados invalidos, los valores deben ser unicamente numericos"
+            }
+            return jsonify(json), 400
         var=matematicas+lenguaje
         var=var/2
         if(var<450):
-            return "El postulante no puede postular a ninguna carrera, debido a que promedia entre lenguaje y matematicas menos de 450 puntos", 400
+            json = {
+                'codigo': 400,
+                'mensaje': "El promedio entre lenguaje y matematicas promedia menos de 450 puntos"
+            }
+            return jsonify(json), 400
         carreras=generar_datos_carreras() ###Generacion de lista con los datos relevantes de cada carrera
         mis_carreras=[]
         ##############################################  Calculo de las ponderaciones del estudiante
@@ -124,22 +169,38 @@ def datos_carrera():
     if(request.method=='GET'):
         args = request.args
         if(len(args)!=1): ###Corrobora que sea solo UN codigo el recibido, si no cumple, manda un error
-            return "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema", 400
+            json = {
+                'codigo': 400,
+                'mensaje': "La cantidad de carreras enviadas es invalida; debe ser enviado solo 1"
+            }
+            return jsonify(json), 400
         else:
             try: ###Corrobora la existencia de una variable 'codigo'; de no existir, manda excepcion
                 cod_recibido=args['codigo']
             except:
-                return "Nombre de variable recibido invalido (el nombre debe se 'codigo')", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "Nombre de variable invalido; la variable debe llamarse 'codigo'"
+                }
+                return jsonify(json), 400
 
             try: ###Corrobora si el codigo es numerico, si no lo es, manda error (los codigos de la UTEM son unicamente numericos)
                 cod_recibido=int(args['codigo'])
             except:
-                return "El codigo a corroborar es invalido para este sistema (codigos solo numericos)", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "El codigo a corroborar es invalido; solo codigos numericos"
+                }
+                return jsonify(json), 400
             
             carreras=generar_info_carreras() ###Se genera un listado con todos los datos de todas las carreras
             for iteracion in range(0,29): ###Se realiza un ciclo iterativo para revisar si existe una carrera con el respectivo codigo
                 if (iteracion == 28): ### En caso de no encajar con ningun codigo de carrera, se retorna una excepcion
-                    return "El codigo ingresado no concuerda con el codigo de ninguna carrera", 400
+                    json = {
+                        'codigo': 400,
+                        'mensaje': "El codigo recibido NO concuerda con ninguna carrera"
+                    }
+                    return jsonify(json), 400
                 if(cod_recibido==carreras[iteracion][0]): ###Si existe una carrera con ese codigo, retorna su informacion
                     return {
                         "Codigo":carreras[iteracion][0],
@@ -162,16 +223,28 @@ def datos_carreras():
     if(request.method=='GET'):
         args = request.args
         if(len(args)==0): ###Se corrobora la existencia de almenos una variable
-            return "La cantidad de carreras enviadas es diferente a las aceptadas por este sistema", 400
+            json = {
+                'codigo': 400,
+                'mensaje': "Cantidad de datos invalido, debe enviarse almenos 1 variable"
+            }
+            return jsonify(json), 400
         elif(len(args)==1): ###En caso de que solo se reciba solo una variable
             palabra=''
             try:
                 palabra=str(args['texto_1']) ###Se corrobora la existencia de la variable solicitada
             except: ###En caso de no estar, se manda una excepcion
-                return "La frase recibida esta mal etiquetada; el nombre de la variable debe ser 'texto_1'", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "Nombre de variable invalido, la variable debe llamarse 'texto_1'"
+                }
+                return jsonify(json), 400
             palabra=palabra.upper() ###La palabra es pasada a mayusculas para mejorar el manejo a futuro
             if(len(palabra)<=3): ###Se corrobora que la palabra tenga almenos 4 caracteres (incluyend)
-                return "La palabra a revisar debe tener un largo minimo de 4 letras"
+                json = {
+                    'codigo': 400,
+                    'mensaje': "La palabra no cumple con el largo minimo (4 caracteres)"
+                }
+                return jsonify(json), 400
             carreras=generar_info_carreras()
             respuestas=[] ###Listado de carreras validas
             for carrera in carreras: ###Para cada carrera...
@@ -191,7 +264,11 @@ def datos_carreras():
                         "Ultimo matriculado": carrera[11]
                     })
             if(len(respuestas)==0): ###En caso de no encontrarse carrera, retorna excepcion
-                return "No se encontro ninguna carrera que concordace", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "La palabra recibida no concuerda con ninguna carrera"
+                }
+                return jsonify(json), 400
             else: ###Si se encuentra almenos 1, las entrega con exito
                 return jsonify(respuestas), 200
         else: ###En caso de recibir multiples variables (cada una con una palabra)
@@ -203,7 +280,11 @@ def datos_carreras():
                     pass
             copia_palabras=[]
             if(len(palabras)==0): ###En caso de que no se detecte ninguna variable con un nombre valido, se retorna una escepcion
-                return "La cantidad de carreras recibidas validas es insuficiente para el funcionamiento del sistema", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "La cantidad de palabras recibidas es invalido; debe ser almenos 1"
+                }
+                return jsonify(json), 400
             else: ###En caso de que si hayan, se realiza ciclo iterativo para corroborar que cumplen con la cantidad minima de letras por palabra
                 for palabra in palabras:
                     if(len(palabra)<=3):
@@ -211,7 +292,11 @@ def datos_carreras():
                     else: ###Si son validas, se re almacenan, en caso contrario, no
                         copia_palabras.append(palabra.upper())
             if(len(copia_palabras)==0): ###En caso de que no queden palabras, se retorna una excepcion
-                return "La cantidad de palabras recibidas es insuficientes", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "Las palabras recibidas son invalidas; deben tener minimo 4 caracteres cada una"
+                }
+                return jsonify(json), 400
             else: ###En caso contrario, se prosigue con el servicio
                 palabras=copia_palabras
             carreras=generar_info_carreras() ###Se crea lista con todos los datos de todas las carreras
@@ -239,7 +324,11 @@ def datos_carreras():
                         })
                     contador+=1
             if(len(datos_carreras_seleccionadas)==0): ###En caso de que ningun codigo concuerde con alguna carrera, se retorna excepcion
-                return "Ninguno de los codigos de careras es valido", 400
+                json = {
+                    'codigo': 400,
+                    'mensaje': "No se encontre ninguna carrera que concordase con esas palabras"
+                }
+                return jsonify(json), 400
             else: ###En caso contrario, se retornan las carreras de manera exitosa
                 return jsonify(datos_carreras_seleccionadas), 200
 

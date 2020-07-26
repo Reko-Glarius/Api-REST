@@ -1,3 +1,9 @@
+"""
+Apartado de Funciones:
+En este espacio de codigo, se encuentran las funciones generadas para resolver los
+problemas solicitados; para mas informacion, cada funcion esta documentada para su
+mejor comprension
+"""
 def generar_datos_carreras(): ###Funcion para generar lista con todos los datos relevantes de todas las carreras
     ### Variables para datos de las carreras
     nom_car=["Administración Pública","Bibliotecología y Documentación","Contador Público y Auditor","Ingeniería Comercial","Ingeniería en Administración Agroindustrial",
