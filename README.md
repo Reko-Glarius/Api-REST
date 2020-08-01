@@ -1,6 +1,12 @@
 # Api-REST
 
-_API de tipo REST para el ramo de Computacion Paralela y Distribuida de la UTEM (Trabajo 2)_
+_API de tipo REST para el ramo de Computacion Paralela y Distribuida de la UTEM (Trabajo 2); El servicio consta de 4 servicios:_
+
+* TOPTEN: Servicio El cual recibe un grupo de puntajes de un estudiante, y entrega una lista con las 10 carreras donde queda mejor posicionado.
+
+* CARRER: Servicio el cual recibe un codigo numero, el cual debe coincidir con el codigo de alguna carrera; En caso de exito, entrega toda la informacion de esa carrera.
+
+* CARRERS: Servicio el cual recibe 1 a N palabras, las cuales son revisadas si coinciden dentro de alguno de los nombres de las carreras; En caso de exito, entrega la informacion de todas las carreras coincidentes.
 
 ### Pre-requisitos 📋
 
@@ -65,11 +71,12 @@ _Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi |user
 
 ## Ejecutando las pruebas ⚙️
 
-_Pruebas en desarrollo Actualmente_
+_Las pruebas realizadas fueron consultando el servicio mediante la herramienta Postman. Para el caso del servicio TOPTEN_
 
 ## Notas adicionales 📖
 * El sistema consta de 2 usuarios permitidos, los cuales a la hora de pasar el sistema a produccion, se recomiendan cambiar o eliminar y reemplazar por un manejo con BB.DD.
 * Los elementos enviados y la forma de envio de estos debe respetar las caracteristicas expuestas en el archivo PDF nombrado "ProyectoRest", el cual se encuentra en la carpeta "Material de Apoyo", como los expuestos en las demas notas adicionales.
+* En el caso del servicio CARRERS, las palabras recibidas deben tener un largo minimo de 4 caracteres
 
 ## Autores ✒️
 
