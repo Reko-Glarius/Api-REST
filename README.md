@@ -73,7 +73,8 @@ _Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi |user
 
 _Las pruebas realizadas fueron consultando el servicio mediante la herramienta Postman. Para el caso del servicio TOPTEN, se testeo realizando 4 acciones_
 * Correcto consumo
-![alt text](Material de Apoyo/1/1.png "1")
+
+![Imagen 1](https://raw.githubusercontent.com/Reko-Glarius/Api-REST/blob/master/Material%20de%20Apoyo/1/1.png)
 
 * Promedio entre matematicas y Lenguajes menor a 450
 ![img](Material de Apoyo/1/1.png "2")
