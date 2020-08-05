@@ -73,26 +73,56 @@ _Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi |user
 
 _Las pruebas realizadas fueron consultando el servicio mediante la herramienta Postman. Para el caso del servicio TOPTEN, se testeo realizando 4 acciones_
 * Correcto consumo
+![img](Material de Apoyo/1/1.png "1")
+
 * Promedio entre matematicas y Lenguajes menor a 450
+![img](Material de Apoyo/1/1.png "2")
+
 * Faltando parametros
+![img](Material de Apoyo/1/1.png "3")
+
 * Parametros no numericos
+![img](Material de Apoyo/1/1.png "4")
+
 
 _Como se puede apreciar, en todos los casos erroneos, se entrega la respectiva descripcion del error junto a su codigo de error; Para el caso de CARRER, las pruebas fueron las siguientes:_
 
 * Correcto consumo
+![img](Material de Apoyo/2/1.png "1")
+
 * Codigo no numerico
+![img](Material de Apoyo/2/1.png "2")
+
 * Sin parametros
+![img](Material de Apoyo/2/1.png "3")
+
 * Exceso de parametros de parametros
+![img](Material de Apoyo/2/1.png "4")
+
 * Codigo no correspondiente a ninguna carrera
+![img](Material de Apoyo/2/1.png "5")
+
 
 _Al igual que en caso anterior, se puede observar como en caso de error o mal consumo, se entrega la informacion correspondiente. Ya finalizando con servicio CARRERS, las pruebas fueron las siguientes:_
 
 * Correcto consumo
+![img](Material de Apoyo/3/1.png "1")
+
 * Ausencia de parametros
+![img](Material de Apoyo/3/1.png "2")
+
 * Un parametro no coincidente
+![img](Material de Apoyo/3/1.png "3")
+
 * Un parametro demasiado corto
+![img](Material de Apoyo/3/1.png "4")
+
 * Multiples parametros cortos
+![img](Material de Apoyo/3/1.png "5")
+
 * Multiples no coincidentes
+![img](Material de Apoyo/3/1.png "6")
+
 
 ## Notas adicionales 📖
 * El sistema consta de 2 usuarios permitidos, los cuales a la hora de pasar el sistema a produccion, se recomiendan cambiar o eliminar y reemplazar por un manejo con BB.DD.
