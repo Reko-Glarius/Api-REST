@@ -73,8 +73,7 @@ _Si a realizdo todo correctamente, aparecera en pantalla el mensaje de "Hi |user
 
 _Las pruebas realizadas fueron consultando el servicio mediante la herramienta Postman. Para el caso del servicio TOPTEN, se testeo realizando 4 acciones_
 * Correcto consumo
-
-![img](Material de Apoyo/1/1.png "1")
+#####![img](Material de Apoyo/1/1.png "1")
 
 * Promedio entre matematicas y Lenguajes menor a 450
 ![img](Material de Apoyo/1/1.png "2")
@@ -89,7 +88,7 @@ _Las pruebas realizadas fueron consultando el servicio mediante la herramienta P
 _Como se puede apreciar, en todos los casos erroneos, se entrega la respectiva descripcion del error junto a su codigo de error; Para el caso de CARRER, las pruebas fueron las siguientes:_
 
 * Correcto consumo
-![img](Material de Apoyo/2/1.png "1")
+#![img](Material de Apoyo/2/1.png "1")
 
 * Codigo no numerico
 ![img](Material de Apoyo/2/1.png "2")
