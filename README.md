@@ -60,6 +60,12 @@ http://127.0.0.1:5000/carrer/   Metodo: GET
 http://127.0.0.1:5000/carrers/  Metodo: GET
 ```
 
+*Codigo de ejemplo de consumo de servicio TOPTEN, mediante cURL*
+
+```
+curl --location --request POST 'http://127.0.0.1:5000/topten' \--header 'Authorization: Basic VGVzdGVyOmJldGFtYW4=' \--form 'nem=500' \--form 'ranking=500' \--form 'lenguajes=500' \--form 'matematicas=500' \--form 'ciencias=0' \--form 'historia=500'
+```
+
 _Si se a efectuado todo corrctamente, se le solicitara un usuario y una clave, las cuales para pruebas y analisis vienen a ser_
 
 ```
