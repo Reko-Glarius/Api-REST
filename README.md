@@ -15,7 +15,7 @@ _Para la instalacion y correcto funcionamiento, se requiere lo siguiente:_
 * [Python](Version 3.8) - Lenguaje empleado
 
 _Mediante instalacion por pip (o pip3, dependiendo el caso de ya poseer python en el equipo), las siguientes librerias:_
-* [Flask](Version )(pip install flask)(https://pypi.org/project/spyne/2.13.2a0/) - Framework estructural del sistema
+* [Flask](Version )(pip install flask) - Framework estructural del sistema
 * [Flask-HTTPAuth](Version 3.0.3)(pip install flask-httpauth)(https://pypi.org/project/Flask-HTTPAuth/) - Implementacion y manejo de seguridad
 * [Flask-CORS](Version 3.0.3)(pip install flask-cors)(https://pypi.org/project/Flask-Cors/) - Implementacion y manejo de seguridad
 
