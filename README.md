@@ -66,6 +66,23 @@ http://127.0.0.1:5000/carrers/  Metodo: GET
 curl --location --request POST 'http://127.0.0.1:5000/topten' \--header 'Authorization: Basic VGVzdGVyOmJldGFtYW4=' \--form 'nem=500' \--form 'ranking=500' \--form 'lenguajes=500' \--form 'matematicas=500' \--form 'ciencias=0' \--form 'historia=500'
 ```
 
+
+*URLs de ejemplo de consumo de servicio CARRER*
+
+```
+http://127.0.0.1:5000/carrer/?codigo=21041
+http://127.0.0.1:5000/carrer/?codigos=21041
+http://127.0.0.1:5000/carrer/?codigo=21041abc
+```
+
+*URLs de ejemplo de consumo de servicio CARRERS*
+
+```
+http://127.0.0.1:5000/carrers/?texto_1=inge
+http://127.0.0.1:5000/carrers/?texto_1=in
+http://127.0.0.1:5000/carrers/?texto_1=inge&texto_2=civil
+```
+
 _Si se a efectuado todo corrctamente, se le solicitara un usuario y una clave, las cuales para pruebas y analisis vienen a ser_
 
 ```
