@@ -90,7 +90,7 @@ _Las pruebas realizadas fueron consultando el servicio mediante la herramienta P
 * Parametros no numericos
 
 
-_Como se puede apreciar, en todos los casos erroneos, se entrega la respectiva descripcion del error junto a su codigo de error; Para el caso de CARRER, las pruebas fueron las siguientes:_
+_Como se puede apreciar, en todos los casos erroneos, se entrega la respectiva descripcion del error junto a su codigo de error; Para el caso de CARRER, el cual recibe el parametro con nombre 'codigo' las pruebas fueron las siguientes:_
 
 * Correcto consumo
 
@@ -103,7 +103,7 @@ _Como se puede apreciar, en todos los casos erroneos, se entrega la respectiva d
 * Codigo no correspondiente a ninguna carrera
 
 
-_Al igual que en caso anterior, se puede observar como en caso de error o mal consumo, se entrega la informacion correspondiente. Ya finalizando con servicio CARRERS, las pruebas fueron las siguientes:_
+_Al igual que en caso anterior, se puede observar como en caso de error o mal consumo, se entrega la informacion correspondiente. Ya finalizando con servicio CARRERS,el cual recibe el/los parametro/s con nombre/s 'texto_1' (o 'texto_n' para el caso de n palabras, donde n es un numero de repetido inferior a la cantidad de parametros) las pruebas fueron las siguientes:_
 
 * Correcto consumo
 
